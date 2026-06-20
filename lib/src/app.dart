@@ -1,33 +1,46 @@
-import 'package:app_gestion_abogados/src/pages/HomePages.dart';
 import 'package:flutter/material.dart';
+import 'routes/routes.dart'; // Importamos el diccionario de rutas
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const Color primaryColor = Color(0xFF1A2B4B);
+
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Gestor Jurídico',
+      debugShowCheckedModeBanner: false,
+
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+        primaryColor: primaryColor,
+        scaffoldBackgroundColor: const Color(0xFFF8F9FA),
+
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryColor,
+          primary: primaryColor,
+          secondary: const Color(0xFF64748B),
+          tertiary: const Color(0xFFC5A059),
+        ),
+
+        // Configuración de la AppBar centralizada
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true, // Título centrado
+          iconTheme: IconThemeData(color: primaryColor),
+          titleTextStyle: TextStyle(
+            color: primaryColor,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+
+      initialRoute:
+          '/', // Una vez se cree la pantalla de login, colocar en routes / y colocar la ruta correspondiente a la pantalla de login
+      routes: getApplicationRoutes(),
     );
   }
 }
