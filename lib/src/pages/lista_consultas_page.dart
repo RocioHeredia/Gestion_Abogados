@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/menu.dart'; // Menú inferior compartido Se debe colocar en cada pantalla como esta en la linea 161 pero cambiadole el idex en el caso de que sea Inicio sera index 0, nuevaconsulta index 2, perfil index 3
-
-import '../models/consulta.dart'; // clase cosulta unificada para tipar los datos de prueba y futuros datos reales de la base de datos
+import '../widgets/menu.dart';
+import '../models/consulta.dart';
+import '../provider/consultas_provider.dart';
 
 class ListaConsultasPage extends StatefulWidget {
   const ListaConsultasPage({super.key});
@@ -31,74 +30,6 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
   String textoBusqueda = '';
 
-  // Lista de datos de prueba tipada estrictamente con el modelo unificado
-
-  final List<Consulta> baseDeDatos = [
-    Consulta(
-      idConsulta: '1',
-
-      cliente: 'Elena Martínez Valdés',
-
-      tema: 'Litigio Sucesorio Internacional',
-
-      fecha: '14 Oct 2023',
-
-      expediente: 'Exp. 511-C',
-
-      estado: 'Pendiente',
-    ),
-
-    Consulta(
-      idConsulta: '2',
-
-      cliente: 'TechNova Solutions S.A.',
-
-      tema: 'Revisión de Patentes',
-
-      fecha: '05 Oct 2023',
-
-      expediente: 'Exp. 309-A',
-
-      estado: 'Resuelto',
-    ),
-
-    Consulta(
-      idConsulta: '3',
-
-      cliente: 'Constructora Horizonte',
-
-      tema: 'Contrato de Licitación Pública',
-
-      fecha: '15 Oct 2023',
-
-      expediente: 'Exp. 415-D',
-
-      estado: 'En análisis',
-    ),
-  ];
-
-  // Barra de búsqueda y filtro
-
-  List<Consulta> get consultasFiltradas {
-    return baseDeDatos.where((consulta) {
-      final matchTexto =
-          consulta.cliente.toLowerCase().contains(
-            textoBusqueda.toLowerCase(),
-          ) ||
-          consulta.tema.toLowerCase().contains(textoBusqueda.toLowerCase()) ||
-          consulta.expediente.toLowerCase().contains(
-            textoBusqueda.toLowerCase(),
-          );
-
-      final estadoFiltro = opcionesFiltro[filtroSeleccionado];
-
-      final matchEstado =
-          estadoFiltro == 'Todo' || consulta.estado == estadoFiltro;
-
-      return matchTexto && matchEstado;
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,9 +39,8 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
         backgroundColor: Colors.white,
 
         elevation: 0,
-
-        automaticallyImplyLeading: false, // Remueve accesos laterales heredados
-
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         title: Text(
           'Gestor Jurídico',
 
@@ -122,14 +52,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
             padding: const EdgeInsets.only(right: 16.0),
 
             child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-
-                  '/perfil', //se debe cambiar por el nombre de la ruta correspondiente a la vista de perfil una vez se cree
-                ); // Enrutamiento directo a la vista de perfil
-              },
-
+              onTap: () => Navigator.pushNamed(context, '/perfil'),
               child: CircleAvatar(
                 radius: 16,
 
@@ -173,14 +96,9 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
             const SizedBox(height: 16),
 
-            // Entrada de texto para búsquedas en tiempo real
+            // Buscador reactivo
             TextField(
-              onChanged: (valor) {
-                setState(() {
-                  textoBusqueda = valor;
-                });
-              },
-
+              onChanged: (valor) => setState(() => textoBusqueda = valor),
               decoration: InputDecoration(
                 hintText: 'Buscar por cliente, tema o expediente...',
 
@@ -210,7 +128,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
             const SizedBox(height: 16),
 
-            // (Filtros horizontales)
+            // Chips de filtrado
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
 
@@ -225,13 +143,8 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
                       label: Text(opcionesFiltro[index]),
 
                       selected: isSelected,
-
-                      onSelected: (bool selected) {
-                        setState(() {
-                          filtroSeleccionado = index;
-                        });
-                      },
-
+                      onSelected: (bool selected) =>
+                          setState(() => filtroSeleccionado = index),
                       selectedColor: primaryColor,
 
                       backgroundColor: Colors.white,
@@ -261,26 +174,8 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
             const SizedBox(height: 16),
 
-            // Contenedor dinámico de visualización de registros
-            Expanded(
-              child: consultasFiltradas.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No se encontraron resultados',
-
-                        style: TextStyle(color: secondaryColor),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: consultasFiltradas.length,
-
-                      itemBuilder: (context, index) {
-                        return _construirTarjetaExpediente(
-                          consultasFiltradas[index],
-                        );
-                      },
-                    ),
-            ),
+            // Consumo de datos asíncronos mediante el patrón de la cátedra
+            Expanded(child: _crearListaFutura()),
           ],
         ),
       ),
@@ -289,7 +184,56 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
     );
   }
 
-  // Tarjetas individuales
+  Widget _crearListaFutura() {
+    return FutureBuilder(
+      future: consultasProvider.cargarData(),
+      initialData: const <Consulta>[],
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          List<Consulta> dataCompleta = snapshot.data;
+
+          // Aplicación de filtros de lógica local (Buscador + Estado)
+          List<Consulta> dataFiltrada = dataCompleta.where((consulta) {
+            final matchTexto =
+                consulta.cliente.toLowerCase().contains(
+                  textoBusqueda.toLowerCase(),
+                ) ||
+                consulta.tema.toLowerCase().contains(
+                  textoBusqueda.toLowerCase(),
+                ) ||
+                consulta.expediente.toLowerCase().contains(
+                  textoBusqueda.toLowerCase(),
+                );
+            final estadoFiltro = opcionesFiltro[filtroSeleccionado];
+            final matchEstado =
+                estadoFiltro == 'Todo' || consulta.estado == estadoFiltro;
+            return matchTexto && matchEstado;
+          }).toList();
+
+          if (dataFiltrada.isEmpty) {
+            return Center(
+              child: Text(
+                'No se encontraron resultados',
+                style: TextStyle(color: secondaryColor),
+              ),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: dataFiltrada.length,
+            itemBuilder: (context, index) =>
+                _construirTarjetaExpediente(dataFiltrada[index]),
+          );
+        } else {
+          return const Center(child: Text('No hay datos disponibles.'));
+        }
+      },
+    );
+  }
 
   Widget _construirTarjetaExpediente(Consulta consulta) {
     Color bgColor = Colors.grey.shade100;
@@ -297,8 +241,6 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
     Color textColor = Colors.grey.shade700;
 
     IconData icono = Icons.info_outline;
-
-    // Mutación estética según el estado transaccional
 
     if (consulta.estado == 'En análisis') {
       bgColor = Colors.blue.shade50;
@@ -321,14 +263,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
     }
 
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-
-          '/detalle', //se debe cambiar por el nombre de la ruta correspondiente a la vista de detalle de consulta una vez se cree
-        ); // Navegación a la vista de detalle de consulta, se debe crear la ruta y la pantalla correspondiente
-      },
-
+      onTap: () => Navigator.pushNamed(context, '/detalle'),
       child: Card(
         elevation: 0,
 
