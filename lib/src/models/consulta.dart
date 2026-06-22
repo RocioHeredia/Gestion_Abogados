@@ -5,7 +5,6 @@ class Consulta {
   final String fecha;
   final String expediente;
   final String estado;
-
   final String descripcion;
   final String contacto;
 
@@ -16,17 +15,17 @@ class Consulta {
     required this.fecha,
     required this.expediente,
     required this.estado,
-    required this.descripcion,
-    required this.contacto,
+    this.descripcion = '',
+    this.contacto = '',
   });
 
   factory Consulta.fromJson(Map<String, dynamic> json) {
     return Consulta(
-      idConsulta: json['id_consulta'].toString(),
+      idConsulta: (json['id_consulta'] ?? json['id'] ?? '').toString(),
       cliente: json['cliente'] ?? 'Sin cliente',
       tema: json['tema'] ?? 'Sin tema',
-      fecha: json['fecha_ingreso'] ?? '',
-      expediente: json['nro_expediente'] ?? '',
+      fecha: json['fecha'] ?? json['fecha_ingreso'] ?? 'Sin fecha',
+      expediente: json['expediente'] ?? json['nro_expediente'] ?? 'Sin ref',
       estado: json['estado'] ?? 'Pendiente',
       descripcion: json['descripcion'] ?? '',
       contacto: json['contacto'] ?? '',

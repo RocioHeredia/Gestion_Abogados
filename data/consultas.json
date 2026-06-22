@@ -1,0 +1,26 @@
+[
+  {
+    "id_consulta": 1,
+    "cliente": "Grupo Inversor Albatros",
+    "tema": "Fusión y Adquisición Comercial",
+    "fecha_ingreso": "12 Oct 2023",
+    "nro_expediente": "Exp. 402-B",
+    "estado": "En análisis"
+  },
+  {
+    "id_consulta": 2,
+    "cliente": "Elena Martínez Valdés",
+    "tema": "Litigio Sucesorio Internacional",
+    "fecha_ingreso": "14 Oct 2023",
+    "nro_expediente": "Exp. 511-C",
+    "estado": "Pendiente"
+  },
+  {
+    "id_consulta": 3,
+    "cliente": "TechNova Solutions S.A.",
+    "tema": "Revisión de Patentes",
+    "fecha_ingreso": "05 Oct 2023",
+    "nro_expediente": "Exp. 309-A",
+    "estado": "Resuelto"
+  }
+]
