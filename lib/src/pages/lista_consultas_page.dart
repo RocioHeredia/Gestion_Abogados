@@ -45,7 +45,9 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
       expediente: 'Exp. 511-C',
 
-      estado: 'Pendiente',
+      estado: 'Pendiente', 
+      descripcion: 'Revisión completa del contrato...', 
+      contacto: '',
     ),
 
     Consulta(
@@ -60,6 +62,8 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
       expediente: 'Exp. 309-A',
 
       estado: 'Resuelto',
+      descripcion: 'Análisis de las patentes solicitadas.',
+      contacto: 'contacto@technova.com',
     ),
 
     Consulta(
@@ -73,7 +77,9 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
       expediente: 'Exp. 415-D',
 
-      estado: 'En análisis',
+      estado: 'En análisis', 
+      descripcion: 'Evaluación de los términos del contrato de licitación.', 
+      contacto: 'cd@constructorahorizonte.com',
     ),
   ];
 
@@ -324,9 +330,9 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
       onTap: () {
         Navigator.pushNamed(
           context,
-
-          '/detalle', //se debe cambiar por el nombre de la ruta correspondiente a la vista de detalle de consulta una vez se cree
-        ); // Navegación a la vista de detalle de consulta, se debe crear la ruta y la pantalla correspondiente
+          '/detalle',
+          arguments: consulta,
+        );// Navegación a la vista de detalle de consulta, se debe crear la ruta y la pantalla correspondiente
       },
 
       child: Card(
