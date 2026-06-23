@@ -39,7 +39,8 @@ class MyApp extends StatelessWidget {
       ),
 
       initialRoute:
-          '/login', // Una vez se cree la pantalla de login, colocar en routes / y colocar la ruta correspondiente a la pantalla de login
+          '/', // Una vez se cree la pantalla de login, colocar en routes / y colocar la ruta correspondiente a la pantalla de login
+
       routes: getApplicationRoutes(),
     );
   }
