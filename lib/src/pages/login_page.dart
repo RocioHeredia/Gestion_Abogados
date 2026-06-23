@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
 
                               Navigator.pushReplacementNamed(
                                 context,
-                                '/Consultas',
+                                '/HomePages',
                               );
                             },
                             child: const Text(
