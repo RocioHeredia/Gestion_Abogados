@@ -5,7 +5,10 @@
     "tema": "Fusión y Adquisición Comercial",
     "fecha_ingreso": "12 Oct 2023",
     "nro_expediente": "Exp. 402-B",
-    "estado": "En análisis"
+    "estado": "En análisis",
+    "descripcion": "Auditoría legal y due diligence para la adquisición estratégica de activos de la firma competidora. Se evalúan contingencias laborales y contratos comerciales vigentes.",
+    "contacto": "Carlosrodrígue@gmail.com"
+
   },
   {
     "id_consulta": 2,
@@ -13,7 +16,9 @@
     "tema": "Litigio Sucesorio Internacional",
     "fecha_ingreso": "14 Oct 2023",
     "nro_expediente": "Exp. 511-C",
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "descripcion": "Apertura de sucesión intestada con bienes raíces ubicados en el exterior. Coordinación con estudio jurídico corresponsal en España para validación de exhortos.",
+    "contacto": "Elenavaldes@gmail.com"
   },
   {
     "id_consulta": 3,
@@ -21,6 +26,8 @@
     "tema": "Revisión de Patentes",
     "fecha_ingreso": "05 Oct 2023",
     "nro_expediente": "Exp. 309-A",
-    "estado": "Resuelto"
+    "estado": "Resuelto",
+    "descripcion": "Presentación de oposición ante el Instituto Nacional de Propiedad Industrial contra marca idéntica en clase 42. Resolución favorable con concesión de registro.",
+    "contacto": "ingjavier@gmail.com"
   }
 ]

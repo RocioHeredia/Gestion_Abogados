@@ -9,23 +9,23 @@ class DetalleConsultaPage extends StatefulWidget {
 }
 
 class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
-  // Paleta de colores oficial unificada con el Integrante 4
+  // Paleta de colores oficial unificada con el grupo
   final Color primaryColor = const Color(0xFF1A2B4B);
   final Color secondaryColor = const Color(0xFF64748B);
   final Color neutralColor = const Color(0xFF77777A);
 
-  // Variable para manejar el estado mutable del expediente localmente
+  // Variable para manejar el estado mutable del expediente localmente 
   String? _estadoMutado;
 
   @override
   Widget build(BuildContext context) {
-    // Captura de los argumentos dinámicos inyectados por el Integrante 4
+    //Recibe la consulta enviada desde otra pantalla.
     final Consulta consulta = ModalRoute.of(context)!.settings.arguments as Consulta;
 
-    // Si es la primera vez que renderiza, adoptamos el estado original del objeto
+    // Si es null, asignale este valor.
     _estadoMutado ??= consulta.estado;
 
-    // Mutación estética y transaccional del indicador según el estado actual
+    // Colores según el estado
     Color statusBgColor = Colors.blue.shade50;
     Color statusTextColor = Colors.blue.shade700;
 
@@ -38,19 +38,14 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      // 1. APPBAR REQUERIDA POR EL TALLER
+      backgroundColor: const Color(0xFFF8F9FA), 
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: primaryColor),
-          onPressed: () => Navigator.pop(context), // Destruye la vista de la pila y regresa
-        ),
         title: Text(
           'Detalle del Caso',
           style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 20),
-        ),
+        ), 
         centerTitle: true,
         actions: [
           Padding(
@@ -59,12 +54,11 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
           ),
         ],
       ),
-      // 2. LISTVIEW REQUERIDO POR EL TALLER (Evita el desbordamiento RenderFlex Overflow)
-      body: ListView(
+      
+      body: ListView(// Evita el desbordamiento RenderFlex Overflow(Permite hacer scroll.)
         padding: const EdgeInsets.all(16.0),
         children: [
-          
-          // 3. CONTENEDOR PRINCIPAL ESTILIZADO (Manejo de márgenes, rellenos y sombras)
+          // tarjeta principal
           Container(
             padding: const EdgeInsets.all(20.0),
             decoration: BoxDecoration(
@@ -78,17 +72,17 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                 ),
               ],
             ),
+
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Fila de Título Dinámico y Estado
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    Expanded(//que ocupe todo
                       child: Text(
-                        consulta.tema,
+                        consulta.tema, // Lee el JSON 
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -98,7 +92,7 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    // Indicador de Estado Reactivo
+                    // 
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
@@ -106,7 +100,7 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        _estadoMutado!.toUpperCase(),
+                        _estadoMutado!.toUpperCase(), //convierte a mayúsculas
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
@@ -118,27 +112,28 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                   ],
                 ),
                 const SizedBox(height: 6),
-                // Código del expediente o referencia externa
+                
+                
                 Text(
-                  consulta.expediente,
+                  consulta.expediente, //expediente
                   style: TextStyle(fontSize: 14, color: secondaryColor),
                 ),
                 const SizedBox(height: 20),
                 const Divider(height: 1, thickness: 0.5),
                 const SizedBox(height: 20),
 
-                // Sección: CLIENTE
+                
                 Text(
-                  'CLIENTE',
+                  'CLIENTE', //cliente
                   style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: secondaryColor, letterSpacing: 1),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  consulta.cliente,
+                  consulta.cliente, //cliente del JSON
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: primaryColor),
                 ),
                 Text(
-                  consulta.contacto.isNotEmpty ? 'Contacto: ${consulta.contacto}' : 'Contacto: Sin registrar',
+                  'Contacto:  ${consulta.contacto}', //contacto del JSON
                   style: TextStyle(fontSize: 14, color: secondaryColor),
                 ),
                 const SizedBox(height: 20),
@@ -166,13 +161,11 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                 ),
                 const SizedBox(height: 24),
 
-                // Sección: DESCRIPCIÓN COMPLETA
                 Text(
                   'DESCRIPCIÓN COMPLETA',
                   style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: secondaryColor, letterSpacing: 1),
                 ),
                 const SizedBox(height: 10),
-                // Sub-contenedor con aspecto de bloque de lectura limpia
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16.0),
@@ -182,9 +175,7 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                     border: Border.all(color: Colors.grey.shade200),
                   ),
                   child: Text(
-                    consulta.descripcion.isNotEmpty 
-                        ? consulta.descripcion 
-                        : 'No se ha provisto una descripción detallada para este expediente jurídico actual.',
+                    consulta.descripcion,
                     style: TextStyle(fontSize: 14, color: primaryColor, height: 1.4),
                   ),
                 ),
@@ -192,48 +183,59 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
             ),
           ),
           
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
-          // 4. BOTONES DE ACCIÓN (ElevatedButtons requeridos por el práctico)
+          // Botones 
           SizedBox(
             width: double.infinity,
-            height: 48,
-            child: OutlinedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.list, color: primaryColor, size: 18),
-              label: Text('Volver al listado', style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600)),
+            height: 46,
+            child: OutlinedButton.icon( // Botón para volver al listado
+              onPressed: () => Navigator.pop(context), //vuelve a la pantalla anterior
+              icon: Icon(Icons.dehaze, color: primaryColor, size: 16),
+              label: Text(
+                'Volver al listado', 
+                style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 14),
+              ),
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.grey.shade400),
+                side: BorderSide(color: Colors.grey.shade300, width: 1.5),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                backgroundColor: Colors.white,
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
           SizedBox(
             width: double.infinity,
-            height: 48,
+            height: 46,
             child: OutlinedButton.icon(
               onPressed: () {
-                // Futura conexión imperativa del Integrante 2 (Modo Edición)
+                Navigator.pushNamed( 
+                  context, 
+                  '/nuevaconsulta',
+                  arguments: consulta, 
+                );
               },
-              icon: Icon(Icons.edit_outlined, color: primaryColor, size: 18),
-              label: Text('Editar información', style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600)),
+              icon: Icon(Icons.edit_outlined, color: primaryColor, size: 16),
+              label: Text(
+                'Editar información', 
+                style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 14),
+              ),
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.grey.shade400),
+                side: BorderSide(color: Colors.grey.shade300, width: 1.5),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                backgroundColor: Colors.white,
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
           SizedBox(
             width: double.infinity,
-            height: 48,
+            height: 46,
             child: ElevatedButton.icon(
               onPressed: () {
-                // Mutación declarativa del estado de la interfaz (UI = f(state))
-                setState(() {
+                setState(() {//El estado cambió, redibuja la pantalla.
                   if (_estadoMutado == 'En análisis') {
                     _estadoMutado = 'Resuelto';
                   } else if (_estadoMutado == 'Resuelto') {
@@ -243,23 +245,26 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                   }
                 });
 
-                ScaffoldMessenger.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar( //mensaje temporal.
                   SnackBar(
                     content: Text('Estado modificado a: $_estadoMutado'),
                     duration: const Duration(seconds: 1),
                   ),
                 );
               },
-              icon: const Icon(Icons.swap_horiz, size: 18),
-              label: const Text('Cambiar estado', style: TextStyle(fontWeight: FontWeight.bold)),
+              icon: const Icon(Icons.update, size: 16, color: Colors.white),
+              label: const Text(
+                'Cambiar estado', 
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor,
-                foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                elevation: 0,
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
         ],
       ),
     );
