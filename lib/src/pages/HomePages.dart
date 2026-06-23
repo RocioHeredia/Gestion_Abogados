@@ -1,87 +1,532 @@
 import 'package:flutter/material.dart';
-
+import '../widgets/menu.dart';
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+        String clienteSeleccionado = '';
+        String temaSeleccionado = '';
+        @override
+        Widget build(BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Gestor Jurídico'),
+              actions: const [
+                Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundColor: Color(0xFF1A2B4B),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ],
+              ),
+body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('You have pushed the button this many times:'),
+            const Text(
+              'Bienvenido, Abogado García',
+              style: TextStyle(
+                fontSize: 34,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Aquí está el resumen de sus consultas.',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+        const SizedBox(height: 30),
+    Container(    // Tarjeta de estadísticas: Total de consultas registradas
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Column(
+          children: [
+            Icon(Icons.folder_open, size: 40),
+            SizedBox(height: 10),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              'Total: 24',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('Consultas Registradas'),
+          ],
+        ),
+      ),
+
+        const SizedBox(height: 20),
+
+    Container( // Tarjeta que muestra la cantidad de consultas pendientes
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Column(
+          children: [
+            Icon(Icons.hourglass_empty,
+                size: 40,
+                color: Colors.orange),
+            SizedBox(height: 10),
+            Text(
+              'Pendientes: 8',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('Requieren Acción'),
+          ],
+        ),
+      ),
+
+      const SizedBox(height: 20),
+
+    Container( // Tarjeta que muestra la cantidad de consultas resueltas
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Column(
+          children: [
+            Icon(Icons.check_circle,
+                size: 40,
+                color: Colors.green),
+            SizedBox(height: 10),
+            Text(
+              'Resueltas: 16',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('Casos Cerrados'),
+            ],
+          ),
+        ),
+
+        SizedBox(height: 30),
+
+        Text( //Titulo consultas recientes
+          'Consultas recientes',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1A2B4B),
+          ),
+        ),
+        SizedBox(height: 20),
+
+    // Consulta reciente: Elena Martínez Valdés
+    Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Elena Martínez Valdés',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+    Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.orange.shade100,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Pendiente',
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        SizedBox(height: 10),
+
+        Text(
+          'Litigio Sucesorio Internacional',
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 18,
+          ),
+        ),
+
+        SizedBox(height: 20),
+
+        Divider(),
+
+        SizedBox(height: 10),
+
+        Row(
+                children: [
+                  Icon(Icons.calendar_today, size: 16),
+                  SizedBox(width: 8),
+                  Text('14 Junio 2026'),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        SizedBox(height: 20),
+
+    // Consulta reciente: TechNova Solutions
+    Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'TechNova Solutions S.A.',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+    Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 6,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.green.shade100,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          'Resuelto',
+          style: TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      SizedBox(height: 10),
+
+      Text(
+        'Revisión de Patentes',
+        style: TextStyle(
+          color: Colors.grey,
+          fontSize: 18,
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      Divider(),
+
+      SizedBox(height: 10),
+
+      Row(
+        children: [
+          Icon(Icons.calendar_today, size: 16),
+          SizedBox(width: 8),
+          Text('05 Junio 2026'),
+              ],
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+
+      SizedBox(height: 20),
+
+    // Consulta reciente: Constructora Horizonte
+    Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
       ),
-    );
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Constructora Horizonte',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 6,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade100,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'En análisis',
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      SizedBox(height: 10),
+
+      Text(
+        'Contrato de Licitación Pública',
+        style: TextStyle(
+          color: Colors.grey,
+          fontSize: 18,
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      Divider(),
+
+      SizedBox(height: 10),
+
+      Row(
+            children: [
+                Icon(Icons.calendar_today, size: 16),
+                SizedBox(width: 8),
+                Text('15 Junio 2026'),
+              ],
+            ),
+          ],
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: OutlinedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/Consultas');
+          },
+          child: Text('Ver todas las consultas'),
+        ),
+      ),
+
+      SizedBox(height: 20),
+  //Calendario
+  Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Junio 2026',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1A2B4B),
+            ),
+          ),
+
+      SizedBox(height: 20),
+      Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text('L'),
+            Text('M'),
+            Text('X'),
+            Text('J'),
+            Text('V'),
+            Text('S'),
+            Text('D'),
+          ],
+        ),
+
+      SizedBox(height: 15),
+      // Primera fila
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('4'),
+          // Día 5 (TechNova)
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                clienteSeleccionado = 'TechNova Solutions S.A.';
+                temaSeleccionado = 'Revisión de Patentes';
+              });
+            },
+            child: Column(
+              children: [
+                Text('5'),
+                SizedBox(height: 2),
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlue,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text('6'),
+          Text('7'),
+          Text('8'),
+          Text('9'),
+          Text('10'),
+        ],
+      ),
+
+      SizedBox(height: 15),
+
+      // Segunda fila
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('11'),
+          Text('12'),
+          Text('13'),
+
+      // Día 14
+      GestureDetector(
+        onTap: () {
+          setState(() {
+            clienteSeleccionado = 'Elena Martínez Valdés';
+            temaSeleccionado = 'Litigio Sucesorio Internacional';
+          });
+        },
+        child: Column(
+          children: [
+            Text('14'),
+            SizedBox(height: 2),
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // Día 15
+      GestureDetector(
+        onTap: () {
+          setState(() {
+            clienteSeleccionado = 'Constructora Horizonte';
+            temaSeleccionado = 'Contrato de Licitación Pública';
+          });
+        },
+        child: Column(
+          children: [
+            Text('15'),
+            SizedBox(height: 2),
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Text('16'),
+      Text('17'),
+              ],
+            ),
+          ],
+        )
+              ),
+        SizedBox(height: 20),
+
+        Divider(),
+
+        SizedBox(height: 20),
+
+        Center(
+          child: Text(
+            clienteSeleccionado.isEmpty
+                ? 'Seleccione una fecha'
+                : '$clienteSeleccionado\n$temaSeleccionado',
+            textAlign: TextAlign.center,
+          ),
+        ),
+        SizedBox(height: 70),
+        ],
+        ),
+        ),
+
+
+  floatingActionButton: FloatingActionButton(
+  backgroundColor: const Color(0xFF001F54),
+  foregroundColor: Colors.white,
+  elevation: 8,
+  onPressed: () {},
+  child: const Icon(Icons.add),
+  ),
+  bottomNavigationBar: const Menu(index: 0),
+  );
+
+
   }
-}
+  }

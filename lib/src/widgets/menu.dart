@@ -17,16 +17,20 @@ class Menu extends StatelessWidget {
 
         switch (otherIndex) {
           case 0:
-            //colocar nombre de ruta correspondiente
+            Navigator.pushReplacementNamed(context, '/HomePages');
             break;
           case 1:
             Navigator.pushReplacementNamed(context, '/Consultas');
             break;
           case 2:
-            //colocar nombre de ruta correspondiente
+            Navigator.pushNamed(context, '/NuevaConsulta').then((_) {
+              if (context.mounted) {
+                (context as Element).markNeedsBuild();
+              }
+            });
             break;
           case 3:
-            //colocar nombre de ruta correspondiente
+            Navigator.pushReplacementNamed(context, '/perfil');
             break;
         }
       },
