@@ -41,7 +41,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
       tema: 'Litigio Sucesorio Internacional',
 
-      fecha: '14 Oct 2023',
+      fecha: '14 Junio 2026',
 
       expediente: 'Exp. 511-C',
 
@@ -55,7 +55,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
       tema: 'Revisión de Patentes',
 
-      fecha: '05 Oct 2023',
+      fecha: '05 Junio 2026',
 
       expediente: 'Exp. 309-A',
 
@@ -69,7 +69,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
       tema: 'Contrato de Licitación Pública',
 
-      fecha: '15 Oct 2023',
+      fecha: '15 Junio 2026',
 
       expediente: 'Exp. 415-D',
 

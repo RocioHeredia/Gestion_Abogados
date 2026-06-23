@@ -17,7 +17,7 @@ class Menu extends StatelessWidget {
 
         switch (otherIndex) {
           case 0:
-            //colocar nombre de ruta correspondiente
+            Navigator.pushReplacementNamed(context, '/');
             break;
           case 1:
             Navigator.pushReplacementNamed(context, '/Consultas');
