@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_gestion_abogados/src/widgets/menu.dart';
 import 'package:app_gestion_abogados/src/models/usuario.dart';
+import 'package:app_gestion_abogados/src/app.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key});
@@ -190,6 +191,8 @@ class _PerfilPageState extends State<PerfilPage> {
                       setState(() {
                         modoOscuro = value;
                       });
+
+                      temaOscuro.value = value;
                     },
                     secondary: const Icon(Icons.dark_mode_outlined),
                     title: const Text('Modo Oscuro'),

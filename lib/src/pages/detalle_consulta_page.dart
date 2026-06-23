@@ -301,7 +301,6 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
             child: ElevatedButton.icon(
               onPressed: () {
                 setState(() {
-                  //El estado cambió, redibuja la pantalla.
                   if (_estadoMutado == 'En análisis') {
                     _estadoMutado = 'Resuelto';
                   } else if (_estadoMutado == 'Resuelto') {
@@ -309,10 +308,11 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                   } else {
                     _estadoMutado = 'En análisis';
                   }
+
+                  consulta.estado = _estadoMutado!;
                 });
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  //mensaje temporal.
                   SnackBar(
                     content: Text('Estado modificado a: $_estadoMutado'),
                     duration: const Duration(seconds: 1),
