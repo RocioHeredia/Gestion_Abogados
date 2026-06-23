@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class Menu extends StatelessWidget {
   final int index;
 
@@ -23,7 +22,7 @@ class Menu extends StatelessWidget {
             Navigator.pushReplacementNamed(context, '/Consultas');
             break;
           case 2:
-            //colocar nombre de ruta correspondiente
+            Navigator.pushReplacementNamed(context, '/NuevaConsulta');
             break;
           case 3:
             //colocar nombre de ruta correspondiente
