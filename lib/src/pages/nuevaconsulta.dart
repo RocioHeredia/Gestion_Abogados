@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/consulta.dart';
 import 'lista_consultas_page.dart';
+import '../provider/consultas_provider.dart';
 
 class NuevaConsultaPage extends StatefulWidget {
   const NuevaConsultaPage({super.key});
@@ -35,7 +36,7 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/Consultas'); 
+            Navigator.pushReplacementNamed(context, '/Consultas');
           },
         ),
       ),
@@ -63,10 +64,7 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                 const SizedBox(height: 8),
                 Text(
                   'Ingrese la información inicial para registrar una nueva consulta jurídica.',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 ),
                 const SizedBox(height: 24),
                 TextField(
@@ -84,21 +82,35 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                       letterSpacing: 0.5,
                       fontWeight: FontWeight.bold,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 18,
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.5,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: const BorderSide(color: Color(0xFF1A2B4B), width: 2.0),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF1A2B4B),
+                        width: 2.0,
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 DropdownButtonFormField<String>(
-                  initialValue: temaController.text.isEmpty ? 'Civil' : temaController.text,
-                  icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF1A2B4B)),
+                  initialValue: temaController.text.isEmpty
+                      ? 'Civil'
+                      : temaController.text,
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Color(0xFF1A2B4B),
+                  ),
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xFF1A2B4B),
@@ -112,17 +124,28 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                       letterSpacing: 0.5,
                       fontWeight: FontWeight.bold,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 18,
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.5,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: const BorderSide(color: Color(0xFF1A2B4B), width: 2.0),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF1A2B4B),
+                        width: 2.0,
+                      ),
                     ),
                   ),
-                  items: ['Civil', 'Penal', 'Laboral', 'Comercial'].map((String tipo) {
+                  items: ['Civil', 'Penal', 'Laboral', 'Comercial'].map((
+                    String tipo,
+                  ) {
                     return DropdownMenuItem<String>(
                       value: tipo,
                       child: Text(tipo),
@@ -150,14 +173,23 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                       letterSpacing: 0.5,
                       fontWeight: FontWeight.bold,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 18,
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.5,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: const BorderSide(color: Color(0xFF1A2B4B), width: 2.0),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF1A2B4B),
+                        width: 2.0,
+                      ),
                     ),
                   ),
                 ),
@@ -181,12 +213,19 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                         });
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
-                          color: estadoSeleccionado == 'Pendiente' ? const Color(0xFFFFEAC1) : Colors.white,
+                          color: estadoSeleccionado == 'Pendiente'
+                              ? const Color(0xFFFFEAC1)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: estadoSeleccionado == 'Pendiente' ? const Color(0xFFFFC154) : Colors.grey.shade300,
+                            color: estadoSeleccionado == 'Pendiente'
+                                ? const Color(0xFFFFC154)
+                                : Colors.grey.shade300,
                             width: 1.5,
                           ),
                         ),
@@ -205,7 +244,9 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                               'Pendiente',
                               style: TextStyle(
                                 color: const Color(0xFF1A2B4B),
-                                fontWeight: estadoSeleccionado == 'Pendiente' ? FontWeight.bold : FontWeight.normal,
+                                fontWeight: estadoSeleccionado == 'Pendiente'
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                                 fontSize: 14,
                               ),
                             ),
@@ -221,12 +262,19 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                         });
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
-                          color: estadoSeleccionado == 'En análisis' ? const Color(0xFFE0E7FF) : Colors.white,
+                          color: estadoSeleccionado == 'En análisis'
+                              ? const Color(0xFFE0E7FF)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: estadoSeleccionado == 'En análisis' ? const Color(0xFF818CF8) : Colors.grey.shade300,
+                            color: estadoSeleccionado == 'En análisis'
+                                ? const Color(0xFF818CF8)
+                                : Colors.grey.shade300,
                             width: 1.5,
                           ),
                         ),
@@ -245,7 +293,9 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                               'En Análisis',
                               style: TextStyle(
                                 color: const Color(0xFF1A2B4B),
-                                fontWeight: estadoSeleccionado == 'En análisis' ? FontWeight.bold : FontWeight.normal,
+                                fontWeight: estadoSeleccionado == 'En análisis'
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                                 fontSize: 14,
                               ),
                             ),
@@ -277,14 +327,20 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                 letterSpacing: 0.5,
                 fontWeight: FontWeight.bold,
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 18,
+              ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.0),
                 borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.0),
-                borderSide: const BorderSide(color: Color(0xFF1A2B4B), width: 2.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFF1A2B4B),
+                  width: 2.0,
+                ),
               ),
             ),
           ),
@@ -292,10 +348,14 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              icon: const Icon(Icons.assignment_turned_in_outlined, size: 22), 
+              icon: const Icon(Icons.assignment_turned_in_outlined, size: 22),
               label: const Text(
                 'GUARDAR CONSULTA',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1,
+                ),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1A2B4B),
@@ -311,16 +371,17 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                   idConsulta: DateTime.now().millisecondsSinceEpoch.toString(),
                   cliente: clienteController.text,
                   tema: temaController.text,
-                  fecha: "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                  fecha:
+                      "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
                   expediente: expedienteController.text,
                   estado: estadoSeleccionado,
                   descripcion: descripcionController.text,
                   contacto: '',
                 );
 
-                ListaConsultasPage.baseDeDatos.add(nuevaConsulta);
+                consultasProvider.opciones.add(nuevaConsulta);
 
-                Navigator.pop(context); 
+                Navigator.pop(context);
               },
             ),
           ),
