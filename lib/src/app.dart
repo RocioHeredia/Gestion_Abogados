@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'routes/routes.dart'; // Importamos el diccionario de rutas
+import 'routes/routes.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -24,11 +24,10 @@ class MyApp extends StatelessWidget {
           tertiary: const Color(0xFFC5A059),
         ),
 
-        // Configuración de la AppBar centralizada
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
-          centerTitle: true, // Título centrado
+          centerTitle: true,
           iconTheme: IconThemeData(color: primaryColor),
           titleTextStyle: TextStyle(
             color: primaryColor,
@@ -38,9 +37,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      initialRoute:
-          '/', // Una vez se cree la pantalla de login, colocar en routes / y colocar la ruta correspondiente a la pantalla de login
-
+      initialRoute: '/',
       routes: getApplicationRoutes(),
     );
   }
