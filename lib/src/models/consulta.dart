@@ -1,33 +1,34 @@
 class Consulta {
-  int? idConsulta; // Identificador opcional para la futura base de datos
-  String cliente;
-  String tema;
-  String fecha;
-  String expediente;
-  String estado;
+  final String idConsulta;
+  final String cliente;
+  final String tema;
+  final String fecha;
+  final String expediente;
+  final String estado;
+  final String descripcion;
+  final String contacto;
 
-  // Constructor
   Consulta({
-    this.idConsulta,
+    required this.idConsulta,
     required this.cliente,
     required this.tema,
     required this.fecha,
     required this.expediente,
     required this.estado,
+    this.descripcion = '',
+    this.contacto = '',
   });
 
-  // Mapeo inteligente y defensivo
   factory Consulta.fromJson(Map<String, dynamic> json) {
     return Consulta(
-      idConsulta: int.tryParse(
-        json['id_consulta']?.toString() ?? json['id']?.toString() ?? '',
-      ),
+      idConsulta: (json['id_consulta'] ?? json['id'] ?? '').toString(),
       cliente: json['cliente'] ?? 'Sin cliente',
       tema: json['tema'] ?? 'Sin tema',
       fecha: json['fecha'] ?? json['fecha_ingreso'] ?? 'Sin fecha',
-      expediente:
-          json['expediente'] ?? json['nro_expediente'] ?? 'Sin expediente',
+      expediente: json['expediente'] ?? json['nro_expediente'] ?? 'Sin ref',
       estado: json['estado'] ?? 'Pendiente',
+      descripcion: json['descripcion'] ?? '',
+      contacto: json['contacto'] ?? '',
     );
   }
 }
