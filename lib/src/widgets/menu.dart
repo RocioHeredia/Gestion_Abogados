@@ -22,7 +22,12 @@ class Menu extends StatelessWidget {
             Navigator.pushReplacementNamed(context, '/Consultas');
             break;
           case 2:
-            Navigator.pushReplacementNamed(context, '/NuevaConsulta');
+            Navigator.pushNamed(context, '/NuevaConsulta').then((_) {
+              
+              if (context.mounted) {
+                (context as Element).markNeedsBuild(); 
+              }
+            });
             break;
           case 3:
             //colocar nombre de ruta correspondiente
