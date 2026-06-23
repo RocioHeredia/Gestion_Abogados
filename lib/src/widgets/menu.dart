@@ -17,7 +17,7 @@ class Menu extends StatelessWidget {
 
         switch (otherIndex) {
           case 0:
-            Navigator.pushReplacementNamed(context, '/');
+            Navigator.pushReplacementNamed(context, '/HomePages');
             break;
           case 1:
             Navigator.pushReplacementNamed(context, '/Consultas');

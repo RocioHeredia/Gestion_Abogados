@@ -10,7 +10,7 @@ import '../pages/detalle_consulta_page.dart';
 Map<String, WidgetBuilder> getApplicationRoutes() {
   return <String, WidgetBuilder>{
     '/': (BuildContext context) => const LoginPage(),
-    '/home': (BuildContext context) => const MyHomePage(),
+    '/HomePages': (BuildContext context) => const MyHomePage(),
     '/perfil': (BuildContext context) => const PerfilPage(),
 
     '/Consultas': (BuildContext context) => const ListaConsultasPage(),
