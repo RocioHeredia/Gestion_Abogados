@@ -26,7 +26,7 @@ class Menu extends StatelessWidget {
             //colocar nombre de ruta correspondiente
             break;
           case 3:
-            //colocar nombre de ruta correspondiente
+            Navigator.pushReplacementNamed(context, '/perfil');
             break;
         }
       },
