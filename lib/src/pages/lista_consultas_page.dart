@@ -1,9 +1,45 @@
 import 'package:flutter/material.dart';
-import '../widgets/menu.dart'; 
-import '../models/consulta.dart'; 
+import '../widgets/menu.dart';
+import '../models/consulta.dart';
 
 class ListaConsultasPage extends StatefulWidget {
   const ListaConsultasPage({super.key});
+
+  static final List<Consulta> baseDeDatos = [
+    Consulta(
+      idConsulta: '1',
+      cliente: 'Elena Martínez Valdés',
+      tema: 'Litigio Sucesorio Internacional',
+      fecha: '14 Oct 2023',
+      expediente: 'Exp. 511-C',
+      estado: 'Pendiente',
+      descripcion:
+          'El cliente solicita una revisión exhaustiva del contrato de prestación de servicios tecnológicos propuesto por su nuevo proveedor de infraestructura en la nube. Se requiere especial atención a las cláusulas de responsabilidad civil, acuerdos de nivel de servicio (SLA) y jurisdicción aplicable en caso de disputa.\n\nAdicionalmente, solicitan evaluar si las penalizaciones por incumplimiento de SLA son proporcionales y si existe alguna cláusula abusiva respecto a la retención de datos post-terminación.',
+      contacto: 'María Fernández',
+    ),
+    Consulta(
+      idConsulta: '2',
+      cliente: 'TechNova Solutions S.A.',
+      tema: 'Revisión de Patentes',
+      fecha: '05 Oct 2023',
+      expediente: 'Exp. 309-A',
+      estado: 'Resuelto',
+      descripcion:
+          'Análisis de las patentes solicitadas ante el registro nacional de propiedad intelectual.',
+      contacto: 'contacto@technova.com',
+    ),
+    Consulta(
+      idConsulta: '3',
+      cliente: 'Constructora Horizonte',
+      tema: 'Contrato de Licitación Pública',
+      fecha: '15 Oct 2023',
+      expediente: 'Exp. 415-D',
+      estado: 'En análisis',
+      descripcion:
+          'Evaluación técnica de los términos y pliegos de bases para la licitación de obras públicas de infraestructura vial.',
+      contacto: 'cd@constructorahorizonte.com',
+    ),
+  ];
 
   @override
   State<ListaConsultasPage> createState() => _ListaConsultasPageState();
@@ -26,48 +62,20 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
   String textoBusqueda = '';
 
-  final List<Consulta> baseDeDatos = [
-    Consulta(
-      idConsulta: '1',
-      cliente: 'Elena Martínez Valdés',
-      tema: 'Litigio Sucesorio Internacional',
-      fecha: '14 Oct 2023',
-      expediente: 'Exp. 511-C',
-      estado: 'Pendiente', 
-      descripcion: 'El cliente solicita una revisión exhaustiva del contrato de prestación de servicios tecnológicos propuesto por su nuevo proveedor de infraestructura en la nube. Se requiere especial atención a las cláusulas de responsabilidad civil, acuerdos de nivel de servicio (SLA) y jurisdicción aplicable en caso de disputa.\n\nAdicionalmente, solicitan evaluar si las penalizaciones por incumplimiento de SLA son proporcionales y si existe alguna cláusula abusiva respecto a la retención de datos post-terminación.', 
-      contacto: 'María Fernández',
-    ),
-    Consulta(
-      idConsulta: '2',
-      cliente: 'TechNova Solutions S.A.',
-      tema: 'Revisión de Patentes',
-      fecha: '05 Oct 2023',
-      expediente: 'Exp. 309-A',
-      estado: 'Resuelto',
-      descripcion: 'Análisis de las patentes solicitadas ante el registro nacional de propiedad intelectual.',
-      contacto: 'contacto@technova.com',
-    ),
-    Consulta(
-      idConsulta: '3',
-      cliente: 'Constructora Horizonte',
-      tema: 'Contrato de Licitación Pública',
-      fecha: '15 Oct 2023',
-      expediente: 'Exp. 415-D',
-      estado: 'En análisis', 
-      descripcion: 'Evaluación técnica de los términos y pliegos de bases para la licitación de obras públicas de infraestructura vial.', 
-      contacto: 'cd@constructorahorizonte.com',
-    ),
-  ];
-
   List<Consulta> get consultasFiltradas {
-    return baseDeDatos.where((consulta) {
+    return ListaConsultasPage.baseDeDatos.where((consulta) {
       final matchTexto =
-          consulta.cliente.toLowerCase().contains(textoBusqueda.toLowerCase()) ||
+          consulta.cliente.toLowerCase().contains(
+            textoBusqueda.toLowerCase(),
+          ) ||
           consulta.tema.toLowerCase().contains(textoBusqueda.toLowerCase()) ||
-          consulta.expediente.toLowerCase().contains(textoBusqueda.toLowerCase());
+          consulta.expediente.toLowerCase().contains(
+            textoBusqueda.toLowerCase(),
+          );
 
       final estadoFiltro = opcionesFiltro[filtroSeleccionado];
-      final matchEstado = estadoFiltro == 'Todo' || consulta.estado == estadoFiltro;
+      final matchEstado =
+          estadoFiltro == 'Todo' || consulta.estado == estadoFiltro;
 
       return matchTexto && matchEstado;
     }).toList();
@@ -80,7 +88,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        automaticallyImplyLeading: false, 
+        automaticallyImplyLeading: false,
         title: Text(
           'Gestor Jurídico',
           style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
@@ -90,7 +98,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
             padding: const EdgeInsets.only(right: 16.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/perfil'); 
+                Navigator.pushNamed(context, '/perfil');
               },
               child: CircleAvatar(
                 radius: 16,
@@ -109,7 +117,11 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
             const SizedBox(height: 16),
             Text(
               'Consultas',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: primaryColor),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: primaryColor,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -160,12 +172,16 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
                       backgroundColor: Colors.white,
                       labelStyle: TextStyle(
                         color: isSelected ? Colors.white : secondaryColor,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                         side: BorderSide(
-                          color: isSelected ? primaryColor : Colors.grey.shade300,
+                          color: isSelected
+                              ? primaryColor
+                              : Colors.grey.shade300,
                         ),
                       ),
                     ),
@@ -185,7 +201,9 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
                   : ListView.builder(
                       itemCount: consultasFiltradas.length,
                       itemBuilder: (context, index) {
-                        return _construirTarjetaExpediente(consultasFiltradas[index]);
+                        return _construirTarjetaExpediente(
+                          consultasFiltradas[index],
+                        );
                       },
                     ),
             ),
@@ -217,11 +235,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          '/detalle',
-          arguments: consulta,
-        );
+        Navigator.pushNamed(context, '/detalle', arguments: consulta);
       },
       child: Card(
         elevation: 0,
@@ -243,11 +257,18 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
                   Expanded(
                     child: Text(
                       consulta.cliente,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: primaryColor),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
+                      ),
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: bgColor,
                       borderRadius: BorderRadius.circular(20),
@@ -258,7 +279,11 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
                         const SizedBox(width: 4),
                         Text(
                           consulta.estado.toUpperCase(),
-                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: textColor),
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: textColor,
+                          ),
                         ),
                       ],
                     ),
@@ -275,13 +300,23 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(Icons.calendar_today_outlined, size: 16, color: neutralColor),
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 16,
+                    color: neutralColor,
+                  ),
                   const SizedBox(width: 6),
-                  Text(consulta.fecha, style: TextStyle(color: neutralColor, fontSize: 12)),
+                  Text(
+                    consulta.fecha,
+                    style: TextStyle(color: neutralColor, fontSize: 12),
+                  ),
                   const SizedBox(width: 16),
                   Icon(Icons.folder_open, size: 16, color: neutralColor),
                   const SizedBox(width: 6),
-                  Text(consulta.expediente, style: TextStyle(color: neutralColor, fontSize: 12)),
+                  Text(
+                    consulta.expediente,
+                    style: TextStyle(color: neutralColor, fontSize: 12),
+                  ),
                 ],
               ),
             ],

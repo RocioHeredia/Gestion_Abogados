@@ -4,7 +4,7 @@ class Consulta {
   final String tema;
   final String fecha;
   final String expediente;
-  final String estado;
+  String estado;
   final String descripcion;
   final String contacto;
 
