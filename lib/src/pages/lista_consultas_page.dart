@@ -96,7 +96,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
             const SizedBox(height: 16),
 
-            // Buscador reactivo
+            // Barra de búsqueda
             TextField(
               onChanged: (valor) => setState(() => textoBusqueda = valor),
               decoration: InputDecoration(
@@ -128,7 +128,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
             const SizedBox(height: 16),
 
-            // Chips de filtrado
+            // Botones de filtrado
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
 
@@ -174,7 +174,7 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
 
             const SizedBox(height: 16),
 
-            // Consumo de datos asíncronos mediante el patrón de la cátedra
+            // Consumo de datos
             Expanded(child: _crearListaFutura()),
           ],
         ),
@@ -263,7 +263,8 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
     }
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/detalle'),
+      onTap: () =>
+          Navigator.pushNamed(context, '/detalle', arguments: consulta),
       child: Card(
         elevation: 0,
 
