@@ -1,3 +1,4 @@
+import 'package:app_gestion_abogados/src/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import '../models/consulta.dart';
 
@@ -299,26 +300,36 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
             width: double.infinity,
             height: 46,
             child: ElevatedButton.icon(
-              onPressed: () {
+              onPressed: () async {
+                String nuevoEstado;
+                if (_estadoMutado == 'En análisis') {
+                      nuevoEstado = 'Resuelto';
+                    } else if (_estadoMutado == 'Resuelto') {
+                      nuevoEstado = 'Pendiente';
+                    } else {
+                      nuevoEstado = 'En análisis';
+                    }
                 setState(() {
-                  if (_estadoMutado == 'En análisis') {
-                    _estadoMutado = 'Resuelto';
-                  } else if (_estadoMutado == 'Resuelto') {
-                    _estadoMutado = 'Pendiente';
-                  } else {
-                    _estadoMutado = 'En análisis';
-                  }
-
-                  consulta.estado = _estadoMutado!;
+                  _estadoMutado= nuevoEstado;
                 });
-
+                try {
+                  await FirebaseService.actualizarEstado(
+                    consulta.idConsulta,
+                    nuevoEstado,
+                  );
+                  if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Estado modificado a: $_estadoMutado'),
                     duration: const Duration(seconds: 1),
                   ),
                 );
-              },
+              } catch (e) { ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error al actualizar: $e'),
+                              ),
+                            );
+                          }},
               icon: const Icon(Icons.update, size: 16, color: Colors.white),
               label: const Text(
                 'Cambiar estado',
