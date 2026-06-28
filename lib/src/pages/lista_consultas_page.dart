@@ -1,7 +1,7 @@
+import 'package:app_gestion_abogados/src/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import '../widgets/menu.dart';
 import '../models/consulta.dart';
-import '../provider/consultas_provider.dart';
 
 class ListaConsultasPage extends StatefulWidget {
   const ListaConsultasPage({super.key});
@@ -185,16 +185,13 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
   }
 
   Widget _crearListaFutura() {
-    return FutureBuilder(
-      future: consultasProvider.cargarData(),
-      initialData: const <Consulta>[],
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    return StreamBuilder<List<Consulta>>(
+      stream: FirebaseService.streamConsultas(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (snapshot.hasData) {
-          List<Consulta> dataCompleta = snapshot.data;
+        }
+        final dataCompleta = snapshot.data!;
 
           // Aplicación de filtros de lógica local (Buscador + Estado)
           List<Consulta> dataFiltrada = dataCompleta.where((consulta) {
@@ -228,11 +225,8 @@ class _ListaConsultasPageState extends State<ListaConsultasPage> {
             itemBuilder: (context, index) =>
                 _construirTarjetaExpediente(dataFiltrada[index]),
           );
-        } else {
-          return const Center(child: Text('No hay datos disponibles.'));
-        }
-      },
-    );
+        } );
+    
   }
 
   Widget _construirTarjetaExpediente(Consulta consulta) {

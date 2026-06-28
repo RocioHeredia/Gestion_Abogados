@@ -1,7 +1,6 @@
+import 'package:app_gestion_abogados/src/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import '../models/consulta.dart';
-import 'lista_consultas_page.dart';
-import '../provider/consultas_provider.dart';
 
 class NuevaConsultaPage extends StatefulWidget {
   const NuevaConsultaPage({super.key});
@@ -366,22 +365,35 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                 ),
                 elevation: 0,
               ),
-              onPressed: () {
+              onPressed: () async {
                 final nuevaConsulta = Consulta(
                   idConsulta: DateTime.now().millisecondsSinceEpoch.toString(),
                   cliente: clienteController.text,
                   tema: temaController.text,
-                  fecha:
-                      "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                  fecha: "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
                   expediente: expedienteController.text,
                   estado: estadoSeleccionado,
                   descripcion: descripcionController.text,
                   contacto: '',
                 );
 
-                consultasProvider.opciones.add(nuevaConsulta);
+                try {
+                  await FirebaseService.guardarConsulta(nuevaConsulta);
 
-                Navigator.pop(context);
+                  if (!context.mounted) return;
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Consulta guardada correctamente')),
+                  );
+
+                  Navigator.pop(context);
+                } catch (e) {
+                  if (!context.mounted) return;
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error: $e')),
+                  );
+                }
               },
             ),
           ),

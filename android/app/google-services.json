@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "992525708569",
+    "project_id": "gestorabogados",
+    "storage_bucket": "gestorabogados.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992525708569:android:117062f71dc891e0a22988",
+        "android_client_info": {
+          "package_name": "com.example.app_gestion_abogados"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpMk3ISOjBew3EpO3mX_PZxlye64TturI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

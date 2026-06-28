@@ -19,7 +19,7 @@ class Consulta {
     this.contacto = '',
   });
 
-  factory Consulta.fromJson(Map<String, dynamic> json) {
+  factory Consulta.fromJson(Map<String, dynamic> json, String id) {
     return Consulta(
       idConsulta: (json['id_consulta'] ?? json['id'] ?? '').toString(),
       cliente: json['cliente'] ?? 'Sin cliente',
@@ -31,4 +31,15 @@ class Consulta {
       contacto: json['contacto'] ?? '',
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id_consulta': idConsulta,
+      'cliente': cliente,
+      'tema': tema,
+      'fecha': fecha,
+      'expediente': expediente,
+      'estado': estado,
+      'descripcion': descripcion,
+      'contacto': contacto,
+    };}
 }

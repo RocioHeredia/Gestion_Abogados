@@ -1,4 +1,4 @@
-import 'dart:convert';
+/*import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/consulta.dart'; // Importamos tu modelo
 
@@ -35,11 +35,19 @@ class _ConsultasProvider {
     }
 
     // Transformamos la lista cruda en objetos de Dart usando tu Factory
-    opciones = listaCruda.map((item) => Consulta.fromJson(item)).toList();
+    opciones = listaCruda.asMap().entries.map<Consulta>((entry) {
+    final index = entry.key;
+    final item = entry.value;
 
+    return Consulta.fromJson(
+      item,
+      index.toString(), // ID artificial
+    );
+  }).toList();
     return opciones;
   }
 }
 
 // Se crea la instancia global del Provider
 final consultasProvider = _ConsultasProvider();
+*/

@@ -1,3 +1,5 @@
+import 'package:app_gestion_abogados/src/models/consulta.dart';
+import 'package:app_gestion_abogados/src/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import '../widgets/menu.dart';
 class MyHomePage extends StatefulWidget {
@@ -31,7 +33,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
               ),
-body: SingleChildScrollView(
+body: StreamBuilder<List<Consulta>>(
+  stream: FirebaseService.streamConsultas(),
+  builder: (context, snapshot) {
+    if (snapshot.hasError) {
+      return const Center(child: Text('Error al cargar datos'));
+    }
+
+    if (!snapshot.hasData) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final consultas = snapshot.data!;
+
+    final total = consultas.length;
+    final pendientes = consultas.where((c) => c.estado == 'Pendiente').length;
+    final resueltas =
+        consultas.where((c) => c.estado == 'Resuelto').length;
+
+    final recientes = consultas.reversed.take(3).toList();
+    return SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,18 +79,18 @@ body: SingleChildScrollView(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Column(
+        child: Column(
           children: [
-            Icon(Icons.folder_open, size: 40),
-            SizedBox(height: 10),
+            const Icon(Icons.folder_open, size: 40),
+            const SizedBox(height: 10),
             Text(
-              'Total: 24',
-              style: TextStyle(
+              'Total: $total',
+              style:  TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text('Consultas Registradas'),
+            const Text('Consultas Registradas'),
           ],
         ),
       ),
@@ -84,20 +104,20 @@ body: SingleChildScrollView(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Column(
+        child: Column(
           children: [
             Icon(Icons.hourglass_empty,
                 size: 40,
                 color: Colors.orange),
             SizedBox(height: 10),
             Text(
-              'Pendientes: 8',
-              style: TextStyle(
+              'Pendientes: $pendientes',
+              style:  TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text('Requieren Acción'),
+            const Text('Requieren Acción'),
           ],
         ),
       ),
@@ -111,15 +131,15 @@ body: SingleChildScrollView(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Column(
+        child: Column(
           children: [
             Icon(Icons.check_circle,
                 size: 40,
                 color: Colors.green),
             SizedBox(height: 10),
             Text(
-              'Resueltas: 16',
-              style: TextStyle(
+              'Resueltas: $resueltas',
+              style:  TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
@@ -141,150 +161,12 @@ body: SingleChildScrollView(
         ),
         SizedBox(height: 20),
 
-    // Consulta reciente: Elena Martínez Valdés
-    Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Elena Martínez Valdés',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-    Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 6,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.orange.shade100,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                'Pendiente',
-                style: TextStyle(
-                  color: Colors.orange,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        SizedBox(height: 10),
-
-        Text(
-          'Litigio Sucesorio Internacional',
-          style: TextStyle(
-            color: Colors.grey,
-            fontSize: 18,
-          ),
-        ),
-
-        SizedBox(height: 20),
-
-        Divider(),
-
-        SizedBox(height: 10),
-
-        Row(
-                children: [
-                  Icon(Icons.calendar_today, size: 16),
-                  SizedBox(width: 8),
-                  Text('14 Junio 2026'),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        SizedBox(height: 20),
-
-    // Consulta reciente: TechNova Solutions
-    Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'TechNova Solutions S.A.',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-    Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 6,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.green.shade100,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          'Resuelto',
-          style: TextStyle(
-            color: Colors.green,
-            fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-
-      SizedBox(height: 10),
-
-      Text(
-        'Revisión de Patentes',
-        style: TextStyle(
-          color: Colors.grey,
-          fontSize: 18,
-        ),
-      ),
-
-      SizedBox(height: 20),
-
-      Divider(),
-
-      SizedBox(height: 10),
-
-      Row(
-        children: [
-          Icon(Icons.calendar_today, size: 16),
-          SizedBox(width: 8),
-          Text('05 Junio 2026'),
-              ],
-            ),
-          ],
-        ),
-      ),
-
-      SizedBox(height: 20),
-
-    // Consulta reciente: Constructora Horizonte
-    Container(
+    Column(
+  children: recientes.map((consulta) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
       width: double.infinity,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -292,35 +174,72 @@ body: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  consulta.cliente,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: consulta.estado == 'Pendiente'
+                      ? Colors.orange.shade100
+                      : consulta.estado == 'Resuelto'
+                          ? Colors.green.shade100
+                          : Colors.blue.shade100,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  consulta.estado,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: consulta.estado == 'Pendiente'
+                        ? Colors.orange
+                        : consulta.estado == 'Resuelto'
+                            ? Colors.green
+                            : Colors.blue,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
           Text(
-            'Constructora Horizonte',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+            consulta.tema,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 6,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              'En análisis',
-              style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+
+          const SizedBox(height: 20),
+          const Divider(),
+          const SizedBox(height: 10),
+
+          Row(
+            children: [
+              const Icon(Icons.calendar_today, size: 16),
+              const SizedBox(width: 8),
+              Text(consulta.fecha),
+            ],
           ),
         ],
       ),
+    );
+  }).toList(),
+),
 
       SizedBox(height: 10),
 
@@ -345,93 +264,91 @@ body: SingleChildScrollView(
                 Text('15 Junio 2026'),
               ],
             ),
-          ],
-        ),
-      ),
+          
+      
 
-      SizedBox(height: 20),
-
-      SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: OutlinedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/Consultas');
-          },
-          child: Text('Ver todas las consultas'),
-        ),
-      ),
-
-      SizedBox(height: 20),
-  //Calendario
-  Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Junio 2026',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1A2B4B),
+          SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: OutlinedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/Consultas');
+              },
+              child: Text('Ver todas las consultas'),
             ),
           ),
 
-      SizedBox(height: 20),
-      Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text('L'),
-            Text('M'),
-            Text('X'),
-            Text('J'),
-            Text('V'),
-            Text('S'),
-            Text('D'),
-          ],
-        ),
-
-      SizedBox(height: 15),
-      // Primera fila
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text('4'),
-          // Día 5 (TechNova)
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                clienteSeleccionado = 'TechNova Solutions S.A.';
-                temaSeleccionado = 'Revisión de Patentes';
-              });
-            },
-            child: Column(
-              children: [
-                Text('5'),
-                SizedBox(height: 2),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: Colors.lightBlue,
-                    shape: BoxShape.circle,
-                  ),
+          SizedBox(height: 20),
+      //Calendario
+      Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: [
+              Text(
+                'Junio 2026',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A2B4B),
                 ),
+              ),
+
+          SizedBox(height: 20),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text('L'),
+                Text('M'),
+                Text('X'),
+                Text('J'),
+                Text('V'),
+                Text('S'),
+                Text('D'),
               ],
             ),
+
+          SizedBox(height: 15),
+          // Primera fila
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('4'),
+              // Día 5 (TechNova)
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    clienteSeleccionado = 'TechNova Solutions S.A.';
+                    temaSeleccionado = 'Revisión de Patentes';
+                  });
+                },
+                child: Column(
+                  children: [
+                    Text('5'),
+                    SizedBox(height: 2),
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: Colors.lightBlue,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text('6'),
+              Text('7'),
+              Text('8'),
+              Text('9'),
+              Text('10'),
+            ],
           ),
-          Text('6'),
-          Text('7'),
-          Text('8'),
-          Text('9'),
-          Text('10'),
-        ],
-      ),
 
       SizedBox(height: 15),
 
@@ -512,21 +429,19 @@ body: SingleChildScrollView(
           ),
         ),
         SizedBox(height: 70),
-        ],
+          ],
         ),
-        ),
-
-
-  floatingActionButton: FloatingActionButton(
-  backgroundColor: const Color(0xFF001F54),
-  foregroundColor: Colors.white,
-  elevation: 8,
-  onPressed: () {},
-  child: const Icon(Icons.add),
-  ),
-  bottomNavigationBar: const Menu(index: 0),
-  );
-
-
+      );
+  },
+),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF001F54),
+        foregroundColor: Colors.white,
+        elevation: 8,
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: const Menu(index: 0),
+    );
   }
-  }
+}
