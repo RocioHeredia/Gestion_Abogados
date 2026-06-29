@@ -270,11 +270,7 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
             height: 46,
             child: OutlinedButton.icon(
               onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/NuevaConsulta',
-                  arguments: consulta,
-                );
+                Navigator.pushNamed(context, '/editar', arguments: consulta);
               },
               icon: Icon(Icons.edit_outlined, color: primaryColor, size: 16),
               label: Text(
@@ -303,14 +299,14 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
               onPressed: () async {
                 String nuevoEstado;
                 if (_estadoMutado == 'En análisis') {
-                      nuevoEstado = 'Resuelto';
-                    } else if (_estadoMutado == 'Resuelto') {
-                      nuevoEstado = 'Pendiente';
-                    } else {
-                      nuevoEstado = 'En análisis';
-                    }
+                  nuevoEstado = 'Resuelto';
+                } else if (_estadoMutado == 'Resuelto') {
+                  nuevoEstado = 'Pendiente';
+                } else {
+                  nuevoEstado = 'En análisis';
+                }
                 setState(() {
-                  _estadoMutado= nuevoEstado;
+                  _estadoMutado = nuevoEstado;
                 });
                 try {
                   await FirebaseService.actualizarEstado(
@@ -318,18 +314,18 @@ class _DetalleConsultaPageState extends State<DetalleConsultaPage> {
                     nuevoEstado,
                   );
                   if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Estado modificado a: $_estadoMutado'),
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
-              } catch (e) { ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Error al actualizar: $e'),
-                              ),
-                            );
-                          }},
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Estado modificado a: $_estadoMutado'),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error al actualizar: $e')),
+                  );
+                }
+              },
               icon: const Icon(Icons.update, size: 16, color: Colors.white),
               label: const Text(
                 'Cambiar estado',
