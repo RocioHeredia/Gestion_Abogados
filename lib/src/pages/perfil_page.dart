@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:app_gestion_abogados/src/widgets/menu.dart';
 import 'package:app_gestion_abogados/src/models/usuario.dart';
 import 'package:app_gestion_abogados/src/app.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app_gestion_abogados/src/services/firebase_service.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key});
@@ -12,8 +14,24 @@ class PerfilPage extends StatefulWidget {
 
 class _PerfilPageState extends State<PerfilPage> {
   bool modoOscuro = false;
-  String nombre = Usuario.nombre; // Inicializar con el nombre del usuario';
-  String correo = 'ejemploabogado@gmail.com';
+  String nombre = '';
+  String correo = FirebaseAuth.instance.currentUser?.email ?? '';
+
+  Future<void> cargarNombre() async {
+    final nombreFirestore = await FirebaseService.obtenerNombre();
+
+    if (!mounted) return;
+
+    setState(() {
+      nombre = nombreFirestore;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargarNombre();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +101,6 @@ class _PerfilPageState extends State<PerfilPage> {
                       final nombreController = TextEditingController(
                         text: nombre,
                       );
-                      final correoController = TextEditingController(
-                        text: correo,
-                      );
 
                       showDialog(
                         context: context,
@@ -100,12 +115,6 @@ class _PerfilPageState extends State<PerfilPage> {
                                   labelText: 'Nombre',
                                 ),
                               ),
-                              TextField(
-                                controller: correoController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Correo',
-                                ),
-                              ),
                             ],
                           ),
                           actions: [
@@ -114,10 +123,15 @@ class _PerfilPageState extends State<PerfilPage> {
                               child: const Text('Cancelar'),
                             ),
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
+                                await FirebaseService.actualizarNombre(
+                                  nombreController.text,
+                                );
+
+                                if (!context.mounted) return;
+
                                 setState(() {
                                   nombre = nombreController.text;
-                                  correo = correoController.text;
                                 });
 
                                 Navigator.pop(context);
@@ -180,7 +194,114 @@ class _PerfilPageState extends State<PerfilPage> {
                     leading: const Icon(Icons.lock_outline),
                     title: const Text('Cambiar Contraseña'),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () {},
+                    onTap: () {
+                      final actualController = TextEditingController();
+                      final nuevaController = TextEditingController();
+                      final confirmarController = TextEditingController();
+
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Cambiar contraseña'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextField(
+                                controller: actualController,
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  labelText: 'Contraseña actual',
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              TextField(
+                                controller: nuevaController,
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  labelText: 'Nueva contraseña',
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              TextField(
+                                controller: confirmarController,
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  labelText: 'Confirmar contraseña',
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (nuevaController.text !=
+                                    confirmarController.text) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Las contraseñas no coinciden',
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                try {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser!;
+
+                                  final cred = EmailAuthProvider.credential(
+                                    email: user.email!,
+                                    password: actualController.text,
+                                  );
+
+                                  await user.reauthenticateWithCredential(cred);
+
+                                  await user.updatePassword(
+                                    nuevaController.text,
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  Navigator.pop(context);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Contraseña actualizada correctamente',
+                                      ),
+                                    ),
+                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  String mensaje =
+                                      "Error al cambiar la contraseña";
+
+                                  if (e.code == 'wrong-password' ||
+                                      e.code == 'invalid-credential') {
+                                    mensaje =
+                                        "La contraseña actual es incorrecta";
+                                  } else if (e.code == 'weak-password') {
+                                    mensaje =
+                                        "La nueva contraseña es demasiado débil";
+                                  }
+
+                                  if (!context.mounted) return;
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(mensaje)),
+                                  );
+                                }
+                              },
+                              child: const Text("Guardar"),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
 
                   const Divider(height: 1),
