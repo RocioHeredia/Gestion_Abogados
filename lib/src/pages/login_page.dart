@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:app_gestion_abogados/src/models/usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:app_gestion_abogados/src/services/firebase_service.dart';
 

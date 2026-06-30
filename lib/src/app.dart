@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'routes/routes.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 ValueNotifier<bool> temaOscuro = ValueNotifier(false);
 
@@ -16,6 +17,15 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Gestor Jurídico',
           debugShowCheckedModeBanner: false,
+
+          locale: const Locale('es', 'ES'),
+          supportedLocales: const [Locale('es', 'ES')],
+
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
 
           themeMode: oscuro ? ThemeMode.dark : ThemeMode.light,
 

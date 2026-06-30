@@ -19,14 +19,14 @@ class FirebaseService {
 
   //funcion para actualizar el nombre del usuario en la base de datos
   static Future<void> actualizarNombre(String nuevoNombre) async {
-    await db.collection('users').doc(uid).update({'userName': nuevoNombre});
+    await db.collection('users').doc(uid).update({'username': nuevoNombre});
   }
 
   //funcion para leer el nombre del usuario en la base de datos
   static Future<String> obtenerNombre() async {
     final snapshot = await db.collection('users').doc(uid).get();
 
-    return snapshot.data()?['userName'] ?? 'user';
+    return snapshot.data()?['username'] ?? 'user';
   }
 
   //funcion para crear un usuario en la base de datos si no existe
@@ -37,7 +37,7 @@ class FirebaseService {
 
     if (!snapshot.exists) {
       await doc.set({
-        'userName': 'user',
+        'username': 'user',
         'mail': auth.currentUser!.email,
         'createdAt': FieldValue.serverTimestamp(),
       });
