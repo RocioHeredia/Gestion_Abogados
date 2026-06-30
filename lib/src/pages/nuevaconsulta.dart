@@ -370,7 +370,8 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                   idConsulta: DateTime.now().millisecondsSinceEpoch.toString(),
                   cliente: clienteController.text,
                   tema: temaController.text,
-                  fecha: "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                  fecha:
+                      "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
                   expediente: expedienteController.text,
                   estado: estadoSeleccionado,
                   descripcion: descripcionController.text,
@@ -383,16 +384,18 @@ class _NuevaConsultaPageState extends State<NuevaConsultaPage> {
                   if (!context.mounted) return;
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Consulta guardada correctamente')),
+                    const SnackBar(
+                      content: Text('Consulta guardada correctamente'),
+                    ),
                   );
 
                   Navigator.pop(context);
                 } catch (e) {
                   if (!context.mounted) return;
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: $e')),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Error: $e')));
                 }
               },
             ),

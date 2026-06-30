@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:app_gestion_abogados/src/models/usuario.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app_gestion_abogados/src/services/firebase_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +14,39 @@ class _LoginPageState extends State<LoginPage> {
   bool ocultarPassword = true;
   final usuarioController = TextEditingController();
   final passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  //Funcion para iniciar sesión con Firebase Authentication
+  Future<void> iniciarSesion() async {
+    String email = usuarioController.text.trim();
+    String password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Debe completar correo y contraseña')),
+      );
+      return;
+    }
+
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseService.crearUsuarioSiNoExiste();
+
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/HomePages');
+      }
+    } on FirebaseAuthException catch (e) {
+      String mensaje = 'Error al iniciar sesión';
+
+      if (e.code == 'invalid-credential') {
+        mensaje = 'Correo o contraseña incorrectos';
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(mensaje)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'USUARIO',
+                          'CORREO ELECTRÓNICO',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
 
@@ -85,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                         TextField(
                           controller: usuarioController,
                           decoration: const InputDecoration(
-                            hintText: 'Ingrese su usuario',
+                            hintText: 'Ingrese su correo electrónico',
                             prefixIcon: Icon(Icons.person_outline),
                             border: OutlineInputBorder(),
                           ),
@@ -153,27 +187,8 @@ class _LoginPageState extends State<LoginPage> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF0B1F4D),
                             ),
-                            onPressed: () {
-                              if (usuarioController.text.trim().isEmpty ||
-                                  passwordController.text.trim().isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Debe completar usuario y contraseña',
-                                    ),
-                                  ),
-                                );
-                                return;
-                              }
+                            onPressed: iniciarSesion,
 
-                              Usuario.nombre = usuarioController.text;
-
-                              Navigator.pushReplacementNamed(
-                                context,
-                                '/HomePages',
-                              );
-                            },
-                
                             child: const Text(
                               'Iniciar Sesión',
                               style: TextStyle(
